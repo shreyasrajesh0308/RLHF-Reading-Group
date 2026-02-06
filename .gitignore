@@ -1,0 +1,14 @@
+# Upstream book repo — each member clones this themselves
+rlhf-book/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
