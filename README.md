@@ -51,7 +51,7 @@ See [CLAUDE.md](CLAUDE.md) for full architecture notes and development commands.
 - One person presents the chapter (~20 min summary + 2-3 discussion questions)
 - Everyone reads beforehand
 - Second half is hands-on: run or modify code together
-- Implement core losses by hand first (REINFORCE, Bradley-Terry, DPO), then use coding agents for experiments
+- Its important to implement core algorithms by hand, to understand them well enough before handing them over to agents. 
 - All implementations go in your personal fork — compare approaches during meetings
 
 ## Meeting Notes
