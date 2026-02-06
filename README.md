@@ -2,11 +2,11 @@
 
 A group of UCLA ECE grad students studying [*Reinforcement Learning from Human Feedback*](https://rlhfbook.com) by Nathan Lambert.
 
-**Goal:** Understand LLM post-training deeply enough to run experiments and do research — reward modeling, policy gradient RL, direct alignment.
+**Goal:** Understand LLM post-training deeply enough to do LLM post training research.
 
 **Book:** [rlhfbook.com](https://rlhfbook.com) | **Code:** [natolambert/rlhf-book](https://github.com/natolambert/rlhf-book) | **Reference runs:** [wandb.ai/natolambert/rlhf-book](https://wandb.ai/natolambert/rlhf-book)
 
-**When:** Thursdays, 5:00 PM | **Where:** Faraday Room
+**When:** Thursdays, 5:00 PM | **Where:** On of the rooms in E4 5th or 6th floor. 
 
 ---
 
@@ -14,7 +14,7 @@ A group of UCLA ECE grad students studying [*Reinforcement Learning from Human F
 
 | Week | Date | Chapter(s) | Topic | Exercise | Presenter |
 |------|------|-----------|-------|----------|-----------|
-| 1 | Feb 12 | Ch 1-3 | Introduction, history, training overview | Setup: clone repo, `uv sync`, run one training job | Shreyas |
+| 1 | Feb 12@Faraday | Ch 1-3 | Introduction, history, training overview | Setup: clone repo, `uv sync`, run one training job | Shreyas |
 | 2 | Feb 19 | Ch 4 | Instruction fine-tuning (SFT) | Write a simple SFT loop from scratch | TBD |
 | 3 | Feb 26 | Ch 5 | Reward models (Bradley-Terry, ORM) | Train preference RM + ORM, compare curves | TBD |
 | 4 | Mar 5 | Ch 5 cont | Process reward models | Train PRM, discuss ORM vs PRM tradeoffs | TBD |
@@ -89,4 +89,4 @@ See [CLAUDE.md](CLAUDE.md) for full architecture notes and development commands.
 
 ## Join Us
 
-Interested in joining? Email Shreyas at [shreyasrajesh38@ucla.edu](mailto:shreyasrajesh38@ucla.edu).
+Interested in joining? Email us at [shreyasrajesh38@ucla.edu](mailto:shreyasrajesh38@ucla.edu).
