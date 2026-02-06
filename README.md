@@ -54,15 +54,6 @@ See [CLAUDE.md](CLAUDE.md) for full architecture notes and development commands.
 - Implement core losses by hand first (REINFORCE, Bradley-Terry, DPO), then use coding agents for experiments
 - All implementations go in your personal fork — compare approaches during meetings
 
-## Members & Forks
-
-| Member | Fork |
-|--------|------|
-| Shreyas Rajesh | TBD |
-| Rushabha Balaji | TBD |
-| Merve Karakas | TBD |
-| Mitalee Oza | TBD |
-
 ## Meeting Notes
 
 - [Week 1 — Feb 12: Introduction & Setup](notes/week01.md)
