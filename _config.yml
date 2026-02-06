@@ -1,0 +1,5 @@
+remote_theme: pages-themes/cayman@v0.2.0
+title: UCLA ECE RLHF Reading Group
+description: A group of UCLA ECE grad students studying Reinforcement Learning from Human Feedback by Nathan Lambert
+plugins:
+  - jekyll-remote-theme
