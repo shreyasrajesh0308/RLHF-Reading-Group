@@ -110,7 +110,9 @@ $$p_\pi(\tau) = \rho_0(s_0) \prod_{t} \pi(a_t \mid s_t) \, p(s_{t+1} \mid s_t, a
 
 ## Notes
 
-*Fill in during the meeting.*
+![The early three-stage RLHF process: SFT, reward model, then RL optimization](../rlhf-book/book/images/rlhf-basic.png)
+
+- **Core intuition for RLHF:** It's a way to bake in "human taste" into AI systems. These preferences are hard to specify — you can't write them as a simple loss function like next-token prediction. But humans *can* compare outputs ("A is better than B"), and RLHF turns that comparative signal into a training objective via reward models. It's "I know it when I see it" turned into a gradient.
 
 ---
 
