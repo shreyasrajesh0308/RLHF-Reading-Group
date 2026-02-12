@@ -4,11 +4,187 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title | default: site.title }}</title>
-  <link rel="stylesheet" href="https://unpkg.com/pages-themes-cayman@0.2.0/assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    .page-header { padding: 1.5rem 1rem; }
-    .main-content { max-width: 52rem; margin: 0 auto; padding: 2rem 1rem; }
-    table { font-size: 0.9rem; }
+    :root {
+      --color-bg: #ffffff;
+      --color-text: #24292f;
+      --color-text-secondary: #57606a;
+      --color-border: #d0d7de;
+      --color-border-light: #e8ecf0;
+      --color-accent: #0969da;
+      --color-accent-dark: #0550ae;
+      --color-header-bg: linear-gradient(135deg, #155799, #159957);
+      --color-code-bg: #f6f8fa;
+      --color-blockquote-bg: #f6f8fa;
+      --color-table-alt: #f6f8fa;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--color-header-bg);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .site-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+    .site-header h1 a { color: white; text-decoration: none; }
+    .site-header h1 a:hover { opacity: 0.9; }
+    .site-header p {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+
+    /* Main content */
+    .content-wrap {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      color: var(--color-text);
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    h1 { font-size: 1.75rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--color-border-light); }
+    h2 { font-size: 1.35rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--color-border-light); }
+    h3 { font-size: 1.1rem; color: var(--color-text); }
+    h4 { font-size: 1rem; color: var(--color-text-secondary); }
+
+    p { margin-bottom: 1rem; }
+
+    /* Links */
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--color-accent-dark); }
+
+    /* Lists */
+    ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    li { margin-bottom: 0.35rem; }
+    li > ul, li > ol { margin-top: 0.35rem; margin-bottom: 0; }
+
+    /* Bold */
+    strong { font-weight: 600; }
+
+    /* Horizontal rules */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border-light);
+      margin: 2rem 0;
+    }
+
+    /* Code */
+    code {
+      font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.85em;
+      background: var(--color-code-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+    }
+    pre {
+      background: var(--color-code-bg);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius);
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.85rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--color-border);
+      text-align: left;
+    }
+    th {
+      background: var(--color-code-bg);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    tr:nth-child(even) { background: var(--color-table-alt); }
+
+    /* Blockquotes */
+    blockquote {
+      border-left: 3px solid var(--color-accent);
+      background: var(--color-blockquote-bg);
+      padding: 0.75rem 1rem;
+      margin: 0 0 1rem 0;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: var(--color-text-secondary);
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    /* Math display blocks */
+    .MathJax_Display, mjx-container[display="true"] {
+      margin: 1.5rem 0 !important;
+      padding: 1rem;
+      background: var(--color-code-bg);
+      border-radius: var(--radius);
+      overflow-x: auto;
+    }
+
+    /* Checkboxes in lists */
+    input[type="checkbox"] { margin-right: 0.4rem; }
+
+    /* Images */
+    img { max-width: 100%; border-radius: var(--radius); }
+
+    /* Footer */
+    .site-footer {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: 1.5rem;
+      border-top: 1px solid var(--color-border-light);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+    .site-footer a { color: var(--color-text-secondary); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .site-header { padding: 1.5rem 1rem; }
+      .site-header h1 { font-size: 1.3rem; }
+      .content-wrap { padding: 1.5rem 1rem; }
+      h1 { font-size: 1.4rem; }
+      h2 { font-size: 1.2rem; }
+    }
   </style>
   <script>
     MathJax = {
@@ -21,15 +197,17 @@
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
 <body>
-  <header class="page-header" role="banner">
-    <h1 class="project-name"><a href="{{ '/' | relative_url }}" style="color: white; text-decoration: none;">{{ site.title }}</a></h1>
-    <h2 class="project-tagline">{{ site.description }}</h2>
+  <header class="site-header">
+    <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+    <p>{{ site.description }}</p>
   </header>
-  <main class="main-content" role="main">
+  <main class="content-wrap">
     {{ content }}
   </main>
-  <footer class="site-footer" style="max-width: 52rem; margin: 0 auto; padding: 1rem;">
-    <span class="site-footer-credits">Hosted on <a href="https://pages.github.com">GitHub Pages</a></span>
+  <footer class="site-footer">
+    <a href="{{ '/' | relative_url }}">Home</a> &middot;
+    <a href="https://github.com/shreyasrajesh0308/RLHF-Reading-Group">GitHub</a> &middot;
+    Hosted on <a href="https://pages.github.com">GitHub Pages</a>
   </footer>
 </body>
 </html>
