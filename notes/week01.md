@@ -55,7 +55,7 @@
 Standard RL: maximize expected reward over trajectories
 RLHF simplification: no state transitions, response-level (bandit) rewards, learned reward model
 
-$$J(\pi) = \mathbb{E}[r_\theta(x, y)] - \beta \cdot D_{KL}(\pi \| \pi_{ref})$$
+$$J(\pi) = \mathbb{E}[r_\theta(x, y)] - \beta \cdot D_{\text{KL}}(\pi \parallel \pi_{\text{ref}})$$
 
 Three key differences from standard RL:
 1. **Reward function → reward model** (learned, not environmental)
@@ -98,10 +98,13 @@ The trend: **more stages, more data, more RL, reasoning-centric.**
 
 ## Key Equations to Know
 
-| Equation | What it means |
-|----------|--------------|
-| $J(\pi) = \mathbb{E}[r_\theta(x,y)] - \beta D_{KL}(\pi \| \pi_{ref})$ | The RLHF objective: maximize reward while staying close to the reference policy |
-| $p_\pi(\tau) = \rho_0(s_0) \prod \pi(a_t|s_t) p(s_{t+1}|s_t,a_t)$ | Trajectory distribution in standard RL (contrast with the simplified RLHF bandit setup) |
+**The RLHF objective** — maximize reward while staying close to the reference policy:
+
+$$J(\pi) = \mathbb{E}[r_\theta(x,y)] - \beta \, D_{\text{KL}}(\pi \parallel \pi_{\text{ref}})$$
+
+**Trajectory distribution in standard RL** — contrast with the simplified RLHF bandit setup:
+
+$$p_\pi(\tau) = \rho_0(s_0) \prod_{t} \pi(a_t \mid s_t) \, p(s_{t+1} \mid s_t, a_t)$$
 
 ---
 
