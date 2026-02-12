@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | default: site.title }}</title>
+  <link rel="stylesheet" href="https://unpkg.com/pages-themes-cayman@0.2.0/assets/css/style.css">
+  <style>
+    .page-header { padding: 1.5rem 1rem; }
+    .main-content { max-width: 52rem; margin: 0 auto; padding: 2rem 1rem; }
+    table { font-size: 0.9rem; }
+  </style>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+  <header class="page-header" role="banner">
+    <h1 class="project-name"><a href="{{ '/' | relative_url }}" style="color: white; text-decoration: none;">{{ site.title }}</a></h1>
+    <h2 class="project-tagline">{{ site.description }}</h2>
+  </header>
+  <main class="main-content" role="main">
+    {{ content }}
+  </main>
+  <footer class="site-footer" style="max-width: 52rem; margin: 0 auto; padding: 1rem;">
+    <span class="site-footer-credits">Hosted on <a href="https://pages.github.com">GitHub Pages</a></span>
+  </footer>
+</body>
+</html>
