@@ -4,6 +4,8 @@ A group of UCLA ECE grad students studying [*Reinforcement Learning from Human F
 
 **Goal:** Understand LLM post-training deeply enough to do LLM post training research.
 
+**Website:** [shreyasrajesh0308.github.io/RLHF-Reading-Group](https://shreyasrajesh0308.github.io/RLHF-Reading-Group/)
+
 **Book:** [rlhfbook.com](https://rlhfbook.com) | **Code:** [natolambert/rlhf-book](https://github.com/natolambert/rlhf-book) | **Reference runs:** [wandb.ai/natolambert/rlhf-book](https://wandb.ai/natolambert/rlhf-book)
 
 **When:** Thursdays, 5:00 PM | **Where:** One of the rooms in E4 5th or 6th floor. 
