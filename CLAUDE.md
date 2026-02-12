@@ -99,3 +99,45 @@ All example training runs are publicly viewable at [wandb.ai/natolambert/rlhf-bo
 | Ch 5: Reward Models | `reward_models/` | Bradley-Terry loss, ORM vs PRM |
 | Ch 6: Policy Gradients | `policy_gradients/` | REINFORCE → PPO → GRPO evolution |
 | Ch 8: Direct Alignment | `direct_alignment/` | DPO and why it works without RL |
+
+## Supplementary Reading — Bridging Book to Frontier
+
+The book covers foundational algorithms. After completing each major section, Claude should proactively surface the key papers, technical reports, and blog posts needed to connect that section's content to current frontier practice.
+
+### What Claude should do
+- After a chapter or topic is completed, remind the reading group and provide a curated list of supplementary readings
+- Prioritize: foundational papers the book builds on, landmark results that extend the book's methods, and recent technical reports showing how these ideas are deployed at scale
+- Include brief (1-2 sentence) annotations explaining why each reading matters and how it connects to the chapter just covered
+- Organize by relevance, not chronology
+
+### Key areas the book doesn't fully cover (supplement these)
+- **Reasoning via RL:** DeepSeek-R1, OpenAI o1/o3-style long chain-of-thought RL, test-time compute scaling
+- **RLHF infrastructure at scale:** Distributed rollout systems, async training (veRL, OpenRLHF)
+- **Synthetic data and self-play:** Distillation, iterative DPO/RLHF, constitutional AI
+- **Frontier post-training recipes:** Llama 3 post-training, Gemini, Claude training methodology (what's public)
+- **Evaluation and red-teaming:** How labs measure alignment, safety evaluations, reward hacking/overoptimization
+
+## Reading Group → Research Roadmap
+
+### Phase 1: Foundations (Book + Supplementary Readings)
+- Work through the book chapters and code examples
+- Run the training scripts, study the wandb curves, build intuition
+- After each chapter, go through the supplementary papers Claude surfaces
+
+### Phase 2: Replication (Bridge to Research)
+- Pick 1-2 papers and replicate key results at small scale (1B-7B) using the book's codebase as a starting point
+- Good replication targets:
+  - DeepSeek-R1-Zero: emergent reasoning with GRPO on a small model (extends Ch 6)
+  - DPO overoptimization dynamics (extends Ch 8)
+  - Process reward model vs outcome reward model comparison (extends Ch 5)
+- Success = matching qualitative trends, not exact numbers
+
+### Phase 3: Original Research
+- Identify a gap or question from the replication work
+- Run controlled experiments varying one thing at a time
+- Publishable research at 1B-7B scale is common — algorithmic insights transfer up
+
+### Compute Resources
+- 4x NVIDIA RTX A6000 (48GB VRAM each), 503GB system RAM, 128 CPU cores
+- Comfortable for full fine-tuning up to 7B, feasible for 13B with multi-GPU
+- Sufficient for all phases of this roadmap
