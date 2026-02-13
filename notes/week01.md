@@ -4,6 +4,8 @@
 
 **Chapters:** 1-3 | **Presenter:** Shreyas
 
+*Note: Content, figures, and examples in these notes are drawn from Nathan Lambert's [RLHF Book](https://rlhfbook.com) and referenced papers. These are reading group notes, not original work.*
+
 ---
 
 ## Chapter 1: Introduction — Key Takeaways
@@ -110,7 +112,7 @@ $$p_\pi(\tau) = \rho_0(s_0) \prod_{t} \pi(a_t \mid s_t) \, p(s_{t+1} \mid s_t, a
 
 ## Notes
 
-![The early three-stage RLHF process: SFT, reward model, then RL optimization](../rlhf-book/book/images/rlhf-basic.png)
+![The early three-stage RLHF process: SFT, reward model, then RL optimization](images/rlhf-basic.png)
 
 - **Core intuition for RLHF:** It's a way to bake in "human taste" into AI systems. These preferences are hard to specify — you can't write them as a simple loss function like next-token prediction. But humans *can* compare outputs ("A is better than B"), and RLHF turns that comparative signal into a training objective via reward models. It's "I know it when I see it" turned into a gradient.
 - **Where does preference data come from?** You sample multiple responses from the SFT model, then humans rank/compare them. The SFT model is the right source — pre-SFT outputs are incoherent garbage, post-SFT you get responses in the right format but with meaningful quality variance for humans to judge. Modern setups make this iterative (on-policy sampling, AI feedback instead of humans).
