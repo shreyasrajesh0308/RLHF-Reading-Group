@@ -24,8 +24,10 @@ A group of UCLA ECE grad students studying [*Reinforcement Learning from Human F
 | 6 | Mar 19 | Ch 7 | Reasoning & inference-time scaling | RLVR experiments | TBD |
 | 7 | Mar 26 | Ch 8 | DPO, IPO | Implement DPO loss by hand, run IPO | TBD |
 | 8 | Apr 2 | Ch 8 cont | SimPO, KTO, ORPO | Compare reference-free methods | TBD |
-| 9 | Apr 9 | Ch 9-10 | Rejection sampling, nature of preferences | Discussion-heavy week | TBD |
-| 10+ | Apr 16+ | Ch 11-17 / papers | Advanced topics + research directions | Pick a question, design an experiment | TBD |
+| 9 | Apr 9 | Paper | **DeepSeek R1** (Guo et al. 2025) — reasoning via RL | Discuss R1-Zero emergence, GRPO at scale | TBD |
+| 10 | Apr 16 | Paper | **TBD — frontier paper** (OLMo 2, or most relevant release at the time) | Full pipeline deep-dive | TBD |
+| 11 | Apr 23 | Ch 9-10 | Rejection sampling, nature of preferences | Discussion-heavy week | TBD |
+| 12+ | Apr 30+ | Ch 11-17 / papers | Advanced topics + research directions | Pick a question, design an experiment | TBD |
 
 ## Setup
 
