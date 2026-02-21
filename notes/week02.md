@@ -72,6 +72,74 @@ But it's **high-variance**:
 
 ---
 
+## Mathematical Definitions: Value Functions
+
+### State Value Function $V^\pi(s)$
+
+The **state value function** under policy $\pi$ is the expected cumulative discounted reward starting from state $s$ and following the policy:
+
+$$V^\pi(s) = \mathbb{E}_{\pi}\left[\sum_{t=0}^{\infty} \gamma^t r_t \mid s_0 = s\right]$$
+
+where:
+- $\gamma$ is the discount factor (0 ≤ γ ≤ 1), weighting immediate vs. future rewards
+- $r_t$ is the reward at time step $t$
+- The expectation is over trajectories sampled from the policy $\pi$
+
+**Interpretation:** "How good is it to be in state $s$ if I follow the policy from now on?"
+
+### Action Value Function $Q^\pi(s, a)$
+
+The **action value function** (also called Q-function) is the expected cumulative reward starting from state $s$, taking action $a$, then following the policy:
+
+$$Q^\pi(s, a) = \mathbb{E}_{\pi}\left[\sum_{t=0}^{\infty} \gamma^t r_t \mid s_0 = s, a_0 = a\right]$$
+
+**Interpretation:** "How good is it to take action $a$ in state $s$, and then follow the policy?"
+
+### Bellman Equations (Recursive Relationship)
+
+Value functions satisfy recursive relationships called **Bellman equations**:
+
+$$V^\pi(s) = \mathbb{E}_a\left[r(s, a) + \gamma V^\pi(s')\right]$$
+
+$$Q^\pi(s, a) = \mathbb{E}_{s'}\left[r(s, a) + \gamma V^\pi(s')\right]$$
+
+**Key insight:** The value of a state is the immediate reward plus the discounted value of the next state. This allows dynamic programming and bootstrapping.
+
+### Advantage Function $A^\pi(s, a)$
+
+The **advantage function** measures how much better action $a$ is compared to the average action under policy $\pi$:
+
+$$A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)$$
+
+**Interpretation:**
+- $A > 0$: Action $a$ is better than average for state $s$
+- $A < 0$: Action $a$ is worse than average for state $s$
+- $A \approx 0$: Action $a$ is about average
+
+### In the LLM/RLHF Context
+
+For language models, the mapping is:
+
+| Standard RL | LLM RLHF |
+|-----------|---------|
+| State $s$ | Prompt $x$ (fixed) |
+| Action $a$ | Generated token $y_t$ or full response $y$ |
+| Reward $r(s,a)$ | Reward model output $r_\theta(x, y)$ |
+| $V(s)$ | Expected reward for prompt: $V(x) = \mathbb{E}_{y \sim \pi}[r_\theta(x,y)]$ |
+| $Q(s,a)$ | Expected reward after taking action: $Q(x,y) = r_\theta(x,y)$ (one-shot) |
+| $A(s,a)$ | How much better response $y$ is: $A(x,y) = r_\theta(x,y) - V(x)$ |
+
+**In RLHF (bandit setting):**
+- No state transitions (bandit, not MDP)
+- Single reward at episode end (no discounting needed, $\gamma$ implicit)
+- Value of prompt $x$:
+$$V(x) = \mathbb{E}_{y \sim \pi_\theta(\cdot|x)}[r_\theta(x, y)]$$
+
+- Advantage of response $y$ given prompt $x$:
+$$A(x, y) = r_\theta(x, y) - V(x)$$
+
+---
+
 ## Tricks to Reduce Bias and Variance: Advantage Functions
 
 ### The problem: pure reward has high variance
