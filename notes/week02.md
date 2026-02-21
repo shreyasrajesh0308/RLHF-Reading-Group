@@ -49,9 +49,11 @@ We want to adjust the policy parameters $\theta$ to increase this objective. The
 $$\nabla_\theta J(\pi_\theta) = \mathbb{E}[r(x, y) \cdot \nabla_\theta \log \pi_\theta(y|x)]$$
 
 **Key insight:** The gradient pulls the policy toward high-reward actions and away from low-reward ones. We can estimate this gradient by:
+
 1. Sample completions $y$ from the current policy
 2. Score each with the reward model $r(x, y)$
-3. Update: $\theta \leftarrow \theta + \alpha \cdot r(x, y) \cdot \nabla_\theta \log \pi_\theta(y|x)$
+3. Update:
+$$\theta \leftarrow \theta + \alpha \cdot r(x, y) \cdot \nabla_\theta \log \pi_\theta(y|x)$$
 
 ### Why this works (and why it's noisy)
 
@@ -124,10 +126,15 @@ $$A_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
 
 REINFORCE is the baseline policy gradient algorithm. It's simple enough to fit on a slide but captures the essential idea:
 
-1. **Collect trajectory:** Sample completion $y$ from policy: $y \sim \pi_\theta(\cdot | x)$
-2. **Compute return:** Get reward from RM: $R = r(x, y)$
+1. **Collect trajectory:** Sample completion $y$ from policy:
+   $$y \sim \pi_\theta(\cdot | x)$$
+
+2. **Compute return:** Get reward from RM:
+   $$R = r(x, y)$$
+
 3. **Compute gradient:** For each token position $t$ in the trajectory:
    $$g_t = \nabla_\theta \log \pi_\theta(y_t | x, y_{<t}) \cdot R$$
+
 4. **Update policy:** Accumulate gradients and apply SGD:
    $$\theta \leftarrow \theta + \alpha \sum_t g_t$$
 
@@ -151,10 +158,17 @@ But the core mechanism is always: sample from policy → score with reward → p
 
 Add a simple baseline $b(x)$ (often just the mean reward):
 
-1. Sample $y \sim \pi_\theta(\cdot | x)$
-2. Get reward $R = r(x, y)$
-3. Compute advantage: $A = R - b(x)$
-4. Update: $\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(y|x) \cdot A$
+1. Sample:
+   $$y \sim \pi_\theta(\cdot | x)$$
+
+2. Get reward:
+   $$R = r(x, y)$$
+
+3. Compute advantage:
+   $$A = R - b(x)$$
+
+4. Update:
+   $$\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(y|x) \cdot A$$
 
 **Effect:** Rewards below the baseline now produce negative gradients, concentrating updates on truly good actions. Variance drops significantly.
 
