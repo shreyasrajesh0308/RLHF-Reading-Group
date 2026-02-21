@@ -60,6 +60,7 @@ See [CLAUDE.md](CLAUDE.md) for full architecture notes and development commands.
 ## Meeting Notes
 
 - [Week 1 — Feb 12: Introduction & Setup](notes/week01.md)
+- [Week 2 — Feb 20: RL Fundamentals & Policy Gradients](notes/week02.md)
 
 ## Papers & Resources
 
