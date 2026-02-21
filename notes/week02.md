@@ -114,6 +114,8 @@ $$A_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
 
 **Benefit:** We can use bootstrapping — future rewards are estimated from the value function rather than waiting for the whole trajectory to finish. This reduces variance even more.
 
+![Value function training: on-policy rollouts are scored (reward), targets are computed via regression against value predictions, and advantages weight the policy gradient. From Nathan Lambert's RLHF Book (page 60).](images/reward_value_interaction.png)
+
 ---
 
 ## The Simplest Policy Gradient Algorithm: REINFORCE
