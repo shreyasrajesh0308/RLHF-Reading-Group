@@ -16,9 +16,9 @@ A group of UCLA ECE grad students studying [*Reinforcement Learning from Human F
 
 | Week | Date | Chapter(s) | Topic | Exercise | Presenter |
 |------|------|-----------|-------|----------|-----------|
-| 1 | Feb 12@Faraday | Ch 1-3 | Introduction, history, training overview | Setup: clone repo, `uv sync`, run one training job | Shreyas |
-| 2 | Feb 19 | Ch 6 (fundamentals) | RL fundamentals & policy gradients | Explore `policy_gradients/` code structure | Rushabha |
-| 3 | Feb 26 | Ch 4-5 | Instruction tuning + Reward models | Train ORM vs PRM, discuss tradeoffs | Merve |
+| 1 | Feb 12 @Faraday | Ch 1-3 | Introduction, history, training overview | Setup: clone repo, `uv sync`, run one training job | Shreyas |
+| 2 | Feb 20 @Maxwell | Ch 6 (fundamentals) | RL fundamentals & policy gradients | Explore `policy_gradients/` code structure | Rushabha |
+| 3 | Feb 26 @Faraday | Ch 4-5 | Instruction tuning + Reward models | Train ORM vs PRM, discuss tradeoffs | Merve |
 | 4 | Mar 5 | Ch 6 cont | Policy gradients (REINFORCE, RLOO, PPO, GRPO) | Implement REINFORCE loss by hand, run RLOO | TBD |
 | 5 | Mar 12 | Ch 7 | Reasoning & inference-time scaling | RLVR experiments | TBD |
 | 6 | Mar 19 | Ch 8 | DPO, IPO | Implement DPO loss by hand, run IPO | TBD |
