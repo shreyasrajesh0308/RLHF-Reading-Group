@@ -144,7 +144,7 @@ These are mathematically identical (rearranging $\sigma(x) = 1/(1+e^{-x})$). For
 
 ### Architecture
 
-Take a pretrained **causal language model** (left-to-right attention only, like GPT — as opposed to BERT which attends in both directions) and replace the language model head with a **reward head**: a linear layer `hidden_dim → 1`.
+Take a pretrained **causal language model** (left-to-right attention only, like GPT — as opposed to BERT which attends in both directions) and attach a **reward head** (linear layer `hidden_dim → 1`) on top of the backbone.
 
 At inference: extract the hidden state at the last token position, project to a scalar through the reward head. That scalar is the reward.
 
