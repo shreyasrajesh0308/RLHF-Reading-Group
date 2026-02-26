@@ -183,12 +183,12 @@ This is similar to HuggingFace's `AutoModelForSequenceClassification`. Typically
 
 ### The four types of reward/value models
 
-| Model | Predicts | Granularity | Training Signal | Architecture |
-|-------|----------|-------------|-----------------|-------------|
-| **Preference RM** | Quality (chosen probability) | One score at EOS | Pairwise comparisons (Bradley-Terry) | `hidden_dim → 1` at last token |
-| **ORM** | Per-token correctness | Every token | Binary correctness labels (outcome) | `hidden_dim → 1` per token (BCE) |
-| **PRM** | Step validity | Per reasoning step | Step-level annotations | `hidden_dim → 3` at step boundaries |
-| **Value Function** | Expected future reward | Per token | On-policy rollout returns (regression) | `hidden_dim → 1` per token (MSE) |
+| Model | Predicts | Granularity | Loss | Architecture |
+|-------|----------|-------------|------|-------------|
+| **Preference RM** | Quality (chosen probability) | One score at EOS | `-log σ(r_c - r_r)` (BT loss) | `hidden_dim → 1` at last token |
+| **ORM** | Per-token correctness | Every token | `BCEWithLogitsLoss` | `hidden_dim → 1` per token |
+| **PRM** | Step validity | Per reasoning step | `CrossEntropyLoss` (3-way) | `hidden_dim → 3` at step boundaries |
+| **Value Function** | Expected future reward | Per token | `MSELoss` (regression) | `hidden_dim → 1` per token |
 
 **Two axes people mix up when comparing these models:**
 
