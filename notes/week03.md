@@ -216,7 +216,9 @@ How per-token ORM training actually works:
 3. That single label gets **broadcast to every token** in the response
 4. Train with binary cross-entropy at each token position
 
-"But if the label is the same for every token, how does it learn anything per-token?" The attention mechanism means each token's hidden state encodes different contextual information. Tokens near errors will have different hidden representations than tokens in correct parts. So the per-token predictions aren't identical — but they ARE noisy, because the supervision is coarse.
+**"But if the label is the same for every token, how does it learn anything per-token?"** The attention mechanism means each token's hidden state encodes different contextual information. Tokens near errors will have different hidden representations than tokens in correct parts. So the per-token predictions aren't identical — but they ARE noisy, because the supervision is coarse.
+
+**What ORM is actually learning:** ORM is outcome-supervised — it's trained to predict "is this whole solution correct?", not "is this specific token wrong." Even though it outputs per-token logits, the supervision is still correct vs incorrect final outcome. The model learns *correlations* with success/failure (e.g., tokens that appear in failing solutions have different patterns), not verified token-level correctness. So if a solution is correct but contains a locally "wrong-looking" intermediate step, ORM supervision won't reliably catch that — because the label is still "success." ORMs don't know which token is wrong inside a correct solution. This is exactly why PRMs exist: to give step-level credit assignment where it matters.
 
 ```python
 class OutcomeRewardModel(nn.Module):
