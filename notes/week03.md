@@ -59,13 +59,14 @@ SFT uses the **same loss function as pretraining** — next-token prediction via
 
 $$\mathcal{L} = -\sum_{t=1}^{T} \log \pi_\theta(y_t | y_{<t})$$
 
-"Predict the next token, compute the log probability of the correct token, sum over all positions."
-
 The key difference from pretraining is not the loss — it's the **data** and **masking**.
 
 ### Prompt masking
 
-During SFT, **prompt tokens are masked out** — the model only trains on assistant response tokens. We don't want the model wasting gradient signal learning to predict user queries. We want it to learn to write good answers, not good questions.
+Prompt tokens are masked out during SFT:
+- Only trains on assistant response tokens
+- No wasting gradient signal learning to predict queries
+- Teach good answers, not good questions
 
 ### Multi-turn masking
 
@@ -74,7 +75,7 @@ For multi-turn conversations, two common approaches:
 1. **Final-turn only:** Only the last assistant response is in the loss. All prior context (including earlier assistant turns) is masked. Cleaner signal — one focused response per example.
 2. **All assistant turns:** Every assistant turn is in the loss, user turns are masked. More data-efficient — every assistant response becomes a training signal.
 
-No strong theoretical reason to prefer one — it's empirical. Tulu 3 uses all-assistant-turns.
+No strong theoretical reason to prefer one — it's empirical. [Tulu 3](https://arxiv.org/abs/2411.15124) uses all-assistant-turns.
 
 ### Best practices
 
@@ -88,7 +89,7 @@ No strong theoretical reason to prefer one — it's empirical. Tulu 3 uses all-a
 
 ### Is IFT research saturated?
 
-The algorithm is settled — it's just supervised learning. Active research is on **data curation**: what data to include, how much synthetic data, mixing ratios, quality filtering. Papers like Tulu 3 and LIMA are about data, not new training methods. The frontier has moved from "how to train" to "what to train on."
+The algorithm is settled — it's just supervised learning. Active research is on **data curation**: what data to include, how much synthetic data, mixing ratios, quality filtering. Papers like [Tulu 3](https://arxiv.org/abs/2411.15124) and LIMA are about data, not new training methods. The frontier has moved from "how to train" to "what to train on."
 
 ---
 
@@ -369,7 +370,7 @@ You *can* drop $V$ entirely — that's REINFORCE (use raw rewards) or GRPO (use 
 ### Why V instead of Q?
 
 - **Q for the action you took** → you already observe it directly. It's the return (reward) from the rollout.
-- **V (average across all possible actions)** → you can't observe this from a single rollout. $V(s_t) = \sum_a \pi(a|s_t) \cdot Q(s_t, a)$ is an expectation over the whole vocabulary. So you estimate it with a small learned model (`hidden_dim → 1`).
+- **V (average across all possible actions)** → you can't observe this from a single rollout. V(s_t) = sum over all actions of pi(a\|s_t) * Q(s_t, a) — it's an expectation over the whole vocabulary. So you estimate it with a small learned model (`hidden_dim → 1`).
 
 You don't need Q for all 32K+ vocabulary tokens — you only need it for the one you actually generated, and you already have that from the reward model.
 
@@ -385,10 +386,10 @@ Walking through the figure (page 60):
 
 **Model predicts $V_t$: 0.45 → 0.55 → 0.62 → 0.68 → 0.71 → 0.73:** Early on the value model is uncertain; as more tokens reveal the answer, confidence grows.
 
-**Advantage $A_t = \hat{V}_t - V_t$:**
+**Advantage = Target - Predicted:**
 
-| Token | Target $\hat{V}_t$ | Predicted $V_t$ | Advantage $A_t$ |
-|-------|---------------------|-----------------|-----------------|
+| Token | Target V | Predicted V | Advantage |
+|-------|----------|-------------|-----------|
 | "The" | 0.73 | 0.45 | **+0.28** |
 | "answer" | 0.73 | 0.55 | **+0.18** |
 | "is" | 0.73 | 0.62 | **+0.11** |
@@ -401,18 +402,19 @@ The value model is trained via **MSE regression** against the actual return.
 
 ### Why subtracting V reduces variance
 
-REINFORCE gradient: $g = \nabla_\theta \log \pi_\theta(y|x) \cdot r(x, y)$
+REINFORCE gradient:
+
+$$g = \nabla_\theta \log \pi_\theta(y \mid x) \cdot r(x, y)$$
 
 If rewards are always between 0.7 and 1.0, every response gets a positive weight. The gradient pushes everything up.
 
-With baseline: $g = \nabla_\theta \log \pi_\theta(y|x) \cdot (r(x, y) - V(x))$
+With baseline:
+
+$$g = \nabla_\theta \log \pi_\theta(y \mid x) \cdot (r(x, y) - V(x))$$
 
 Now good responses get positive weight, bad ones get negative weight. The gradient concentrates on the **relative** signal.
 
-**Why this is unbiased:**
-$$\mathbb{E}_{y \sim \pi}\left[V(x) \cdot \nabla_\theta \log \pi_\theta(y|x)\right] = V(x) \cdot \underbrace{\mathbb{E}_{y \sim \pi}\left[\nabla_\theta \log \pi_\theta(y|x)\right]}_{= 0 \text{ (score function identity)}} = 0$$
-
-Subtracting any baseline is free — zero bias, reduced variance.
+**Why this is unbiased:** The expected value of the baseline term is zero because of the score function identity — the expected gradient of log-probability under its own distribution is always zero. Subtracting any baseline is free: zero bias, reduced variance.
 
 ### Connecting it all: denser rewards help RL
 
