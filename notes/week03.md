@@ -420,13 +420,14 @@ Now good responses get positive weight, bad ones get negative weight. The gradie
 
 ### Connecting it all: denser rewards help RL
 
-| Reward type | Granularity | Credit assignment | Algorithms |
+| Reward type | Supervision | Credit assignment | Algorithms |
 |-------------|-------------|-------------------|------------|
-| **Preference RM / ORM** | End of sequence | Coarse (needs V baseline) | REINFORCE, PPO, GRPO |
+| **Preference RM** | End of sequence (scalar at EOS) | Coarse (needs V baseline) | REINFORCE, PPO, GRPO |
+| **ORM** | Outcome-level, but may output per-token | Coarse (broadcast label) | REINFORCE, PPO, GRPO |
 | **PRM** | Per reasoning step | Fine-grained | Better advantages, less noise |
-| **Per-token** | Every token | Maximum | Q-learning viable, but supervision nearly impossible |
+| **Per-token** | Every token | Maximum | Dense rewards make TD-style ideas more plausible, but action space + off-policy instability make it very hard in practice |
 
-This is the core insight connecting Chapters 5 and 6: the **quality of the reward signal** determines how well RL training works. PRMs give better signal → RL converges faster → less reward hacking. The Monte Carlo PRM training method is essentially **empirical Q-estimation** — sample many continuations from each step and check success rates.
+This is the core insight connecting Chapters 5 and 6: the **quality of the reward signal** determines how well RL training works. PRMs give better signal → RL converges faster → less reward hacking. Useful analogy (not equivalence): Monte Carlo PRM training resembles empirical Q-estimation — sample many continuations from each step and check success rates.
 
 ---
 
