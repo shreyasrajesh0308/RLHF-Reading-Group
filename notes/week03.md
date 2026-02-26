@@ -6,6 +6,14 @@
 
 *Note: Content, figures, and examples in these notes are drawn from Nathan Lambert's [RLHF Book](https://rlhfbook.com) and referenced papers. These are reading group notes, not original work.*
 
+### Learning objectives
+
+By the end of this session you should be able to:
+1. Write RLHF as a contextual-bandit RL problem with a learned reward
+2. Derive the Bradley-Terry preference objective and explain why it depends on score *differences*
+3. Cleanly distinguish **BT RM vs ORM vs PRM vs Value Function** — what supervision each needs, what it outputs, and why "aggregation" shows up for some but not others
+4. Know what goes wrong (distribution shift, reward hacking, style bias) and how people benchmark RMs
+
 ---
 
 ## Chapter 4: Instruction Fine-Tuning (IFT)
@@ -168,7 +176,7 @@ This is similar to HuggingFace's `AutoModelForSequenceClassification`. Typically
 
 **Preference margin (Llama 2):** When annotators do provide Likert scores, use the margin between scores in the loss: $\mathcal{L} = -\log \sigma(r_c - r_r - m(y_c, y_r))$. Llama 3 dropped this — didn't help at scale. Likely because margins overweight inconsistent annotator calibration, and as models improve many comparisons become "close" so margin noise dominates.
 
-**K-wise ranking (Plackett-Luce):** Generalize from pairs to full rankings of K completions. Reduces to Bradley-Terry when K=2. Helps with circular ranking issues (A>B, B>C, C>A) by seeing the full ordering at once. Note: BT *assumes* a global scalar score exists, so it's inherently transitive — cycles in data are noise the model compromises on. If preferences are truly intransitive/contextual, you'd need a richer model (context-dependent reward, mixtures, etc.).
+**K-wise ranking (Plackett-Luce):** Generalize from pairs to full rankings of K completions. Reduces to Bradley-Terry when K=2. Helps with circular ranking issues (A>B, B>C, C>A) by seeing the full ordering at once. Note: BT *assumes* a global scalar latent utility exists, so it's inherently transitive — cycles in data are noise the model compromises on. This is an important "assumptions matter" point: if preferences are truly intransitive or context-dependent (e.g., multi-objective tradeoffs where helpfulness and safety conflict), you'd need a richer model (context-dependent reward, mixtures, etc.). The scalar utility assumption is convenient but nontrivial.
 
 **Balancing multiple comparisons per prompt:** With K responses per prompt, form all $\binom{K}{2}$ pairs and weight the loss per comparison to balance the training signal.
 
@@ -310,10 +318,20 @@ The RM is an instrument in a bigger pipeline, and picking the "best RM" by intui
 ### Current state of the field
 
 Reward modeling research is very active, with many benchmarks emerging in 2024-2025:
-- **General:** RewardBench, RMBench, Preference Proxy Evaluations
-- **Process RMs:** PRMBench, ProcessBench
-- **Specialized:** multilingual (M-RewardBench), agentic (Agent-RewardBench), multimodal (VL RewardBench)
-- **Survey:** "A Survey of Process Reward Models" (2025) covers the broader PRM landscape
+
+**Preference RM benchmarks:**
+- [RewardBench](https://arxiv.org/abs/2403.13787) (2024) — broad benchmark of prompt/chosen/rejected trios
+- [RM-Bench](https://arxiv.org/abs/2410.16184) (2024) — targets subtle content differences + robustness to style bias
+- [reWordBench](https://ai.meta.com/research/publications/rewordbench-benchmarking-and-improving-the-robustness-of-reward-models-with-transformed-inputs/) (2025, Meta) — tests robustness under meaning/ranking-preserving input transforms
+- [RewardBench 2](https://arxiv.org/abs/2506.01937) (2025) — harder data, stronger correlation to downstream PPO / best-of-N
+- Frick et al. (ICLR 2025), ["How to Evaluate Reward Models for RLHF"](https://openreview.net/pdf?id=cbttLtO94Q) — argues for proxy evaluations that predict downstream RLHF outcomes
+
+**PRM / step-level benchmarks:**
+- [ProcessBench](https://arxiv.org/abs/2412.06559) (2024) — measures ability to identify erroneous steps in math reasoning
+- [PRMBench](https://arxiv.org/abs/2501.03124) (2025) — fine-grained PRM error detection beyond "step correctness"
+
+**Surveys:**
+- "A Survey of Process Reward Models" (2025) covers the broader PRM landscape
 
 ---
 
@@ -474,6 +492,16 @@ WANDB_MODE=disabled uv run python -m reward_models.train_prm --samples 400 --epo
 ```
 
 **Compare:** How do the training curves differ? How does the PRM assign credit to individual steps vs. the ORM's single score?
+
+---
+
+## Suggested Reading Order (for going deeper)
+
+1. **RLHF Book Ch. 5** — Reward Models (the base text for this week)
+2. **Sutton & Barto** — skim agent-environment framing + bandits for RL context
+3. **Leike et al. 2018**, ["Scalable Agent Alignment via Reward Modeling"](https://arxiv.org/abs/1811.07871) — original motivation: alignment/specification via reward modeling
+4. **RewardBench + RM-Bench** — what breaks in practice, how RMs are evaluated
+5. **Lightman et al. 2023**, ["Let's Verify Step by Step"](https://arxiv.org/abs/2305.20050) + ProcessBench/PRMBench — the ORM vs PRM world
 
 ---
 
