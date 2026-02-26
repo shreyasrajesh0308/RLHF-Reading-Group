@@ -169,7 +169,7 @@ class BradleyTerryRewardModel(nn.Module):
 
 This is similar to HuggingFace's `AutoModelForSequenceClassification`. Typically **all weights are trained** (full fine-tuning), not just the new head.
 
-**Trained for 1 epoch only** — preference data is noisy (~25-30% annotator disagreement) and the label space is simple (binary). A second epoch lets the model memorize annotator quirks rather than learning general preferences.
+**Often 1 epoch (or very few) is used to avoid overfitting** — preference data is noisy (~25-30% annotator disagreement) and the label space is simple (binary), so extra epochs risk memorizing annotator quirks rather than learning general preferences. The exact choice is empirical.
 
 ### Variants
 
