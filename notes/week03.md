@@ -299,6 +299,19 @@ Step 3: The answer is 1.2                  ✗ (PRM: incorrect)
 - **ORMs** are great when correctness is verifiable (math/code) — you can get tons of labels cheaply by auto-grading final answers
 - **PRMs** are great when you care about *how* the model reasons — you can pinpoint where it went wrong and reward human-endorsed reasoning steps
 
+### The bigger picture: automated verification and RLAIF
+
+The ORM vs PRM distinction points to a deeper trend: **the verification bottleneck**. As models get more capable, humans struggle to verify their outputs — a PhD mathematician can check a proof, but that doesn't scale. This is pushing the field from RLHF (human feedback) toward **RLAIF** (AI feedback). The pipeline is the same, the only difference is who provides the signal:
+
+- **RLHF:** human labels → reward model → RL
+- **RLAIF:** AI labels → reward model → RL (or the AI *is* the reward model)
+
+PRMs are central to this shift. For verifying complex reasoning (e.g., mathematical proofs, multi-step code), you need step-level verification, not just "is the final answer right." A PRM that can check each reasoning step is essentially an automated verifier.
+
+The progression: human verifiers (expensive, doesn't scale) → PRMs trained on human labels (PRM800K) → PRMs trained via Monte Carlo (no humans, just a final answer checker) → fully generative verifiers that reason about *why* a step is wrong. Each step removes more of the human bottleneck.
+
+---
+
 ### Generative Reward Modeling (LLM-as-a-judge)
 
 Instead of training a dedicated RM, prompt an existing LLM to judge responses — mirroring human annotation. Used in evaluations like AlpacaEval, Arena-Hard, WildBench.
