@@ -282,7 +282,21 @@ Step 3: The answer is 1.2                  ✗ (PRM: incorrect)
 **How PRMs get their labels:**
 
 1. **Human annotation (PRM800K):** Annotators label each step as correct/incorrect/neutral. Expensive but high quality. Limited to domains where humans can verify steps.
-2. **Monte Carlo estimation:** From each intermediate step, sample many completions to the end. Check what fraction reach the correct final answer. Step quality ≈ completion success rate from that point. Cheaper and scalable, but noisier.
+2. **Monte Carlo estimation:** Instead of paying humans to label each step, you automate it. From each intermediate step, sample many completions (rollouts) to the end and check what fraction reach the correct final answer. The step's quality score ≈ completion success rate from that point.
+
+   **Concrete example:**
+   ```
+   Math problem: "What is 15% of 80?"
+
+   Step 1: Convert 15% to decimal → 0.15
+     → Sample 100 completions from here → 92 reach correct answer
+     → Step 1 score: 0.92 (good step)
+
+   Step 2: Multiply 0.15 × 80 → 1.2  (wrong!)
+     → Sample 100 completions from here → 3 reach correct answer
+     → Step 2 score: 0.03 (bad step — almost nothing recovers from this error)
+   ```
+   Cheaper and scalable (only need a final answer checker, no human step labels), but noisier since you're estimating with finite samples.
 
 ### ORM vs PRM tradeoffs
 
