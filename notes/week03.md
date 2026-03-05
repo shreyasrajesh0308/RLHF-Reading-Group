@@ -18,8 +18,7 @@ By the end of this session you should be able to:
 
 ## Chapter 4: Instruction Fine-Tuning (IFT)
 
-<details>
-<summary><strong>What IFT does and why it comes first</strong></summary>
+### What IFT does and why it comes first
 
 Instruction fine-tuning (IFT), also called supervised fine-tuning (SFT), teaches a pretrained language model the **instruction-response format**. Without it, the model just continues text — it doesn't know to answer questions.
 
@@ -29,10 +28,7 @@ Two lines of work converged to make IFT happen:
 1. NLP shifted from task-specific fine-tuning to unified instruction framing (T5, FLAN, T0)
 2. Scaling pretrained LMs showed generalization improves dramatically when the model is explicitly trained on instruction-response examples
 
-</details>
-
-<details>
-<summary><strong>Chat templates</strong></summary>
+### Chat templates
 
 All post-training stages rely on a structured format called the **chat template**. The model has special tokens:
 - `<bos_token>` — beginning of sequence
@@ -57,10 +53,7 @@ In practice, the template is Jinja2 code stored in the tokenizer and applied via
 
 **Hierarchical system prompts:** OpenAI and other providers use a system where there's a hidden meta-prompt users can't see ("You are ChatGPT, made by OpenAI...") that takes priority over user-configured system prompts. If the user's system prompt conflicts with the hidden one (e.g., "ignore safety guidelines"), the hidden one wins.
 
-</details>
-
-<details>
-<summary><strong>The autoregressive loss</strong></summary>
+### The autoregressive loss
 
 SFT uses the **same loss function as pretraining** — next-token prediction via cross-entropy:
 
@@ -68,20 +61,14 @@ $$\mathcal{L} = -\sum_{t=1}^{T} \log \pi_\theta(y_t | y_{<t})$$
 
 The key difference from pretraining is not the loss — it's the **data** and **masking**.
 
-</details>
-
-<details>
-<summary><strong>Prompt masking</strong></summary>
+### Prompt masking
 
 Prompt tokens are masked out during SFT:
 - Only trains on assistant response tokens
 - No wasting gradient signal learning to predict queries
 - Teach good answers, not good questions
 
-</details>
-
-<details>
-<summary><strong>Multi-turn masking</strong></summary>
+### Multi-turn masking
 
 For multi-turn conversations, two common approaches:
 
@@ -90,10 +77,7 @@ For multi-turn conversations, two common approaches:
 
 No strong theoretical reason to prefer one — it's empirical. [Tulu 3](https://arxiv.org/abs/2411.15124) uses all-assistant-turns.
 
-</details>
-
-<details>
-<summary><strong>Best practices</strong></summary>
+### Best practices
 
 1. **High-quality completions are key** — the model learns from responses (prompts are masked)
 2. **~1M prompts** is the practical sweet spot; diminishing returns beyond that
@@ -103,21 +87,15 @@ No strong theoretical reason to prefer one — it's empirical. [Tulu 3](https://
 6. **Run multiple seeds** and pick the best — post-training is sensitive to randomness
 7. **QLoRA** makes SFT accessible on consumer hardware for narrow domains
 
-</details>
-
-<details>
-<summary><strong>Is IFT research saturated?</strong></summary>
+### Is IFT research saturated?
 
 The algorithm is settled — it's just supervised learning. Active research is on **data curation**: what data to include, how much synthetic data, mixing ratios, quality filtering. Papers like [Tulu 3](https://arxiv.org/abs/2411.15124) and LIMA are about data, not new training methods. The frontier has moved from "how to train" to "what to train on."
-
-</details>
 
 ---
 
 ## Chapter 5: Reward Models
 
-<details>
-<summary><strong>Where reward models fit in the pipeline</strong></summary>
+### Where reward models fit in the pipeline
 
 ![The reward model plays the role of the environment's reward function in standard RL — except in RLHF we learn it from human preferences.](images/rlhf-overview.png)
 
@@ -131,10 +109,7 @@ The RM plays the role of the **environment's reward function** in standard RL �
 
 Once trained, the reward model IS a function — plug in (prompt, response), get a scalar out. Labels are only needed for training, not inference.
 
-</details>
-
-<details>
-<summary><strong>Historical context: alignment, IRL, and reward models</strong></summary>
+### Historical context: alignment, IRL, and reward models
 
 Reward models were originally proposed for studying the **value alignment problem** (Leike et al. 2018) — ensuring AI pursues goals aligned with human values. The core obstacle: good reward functions are hard to design because users often only have an *implicit* understanding of what they want.
 
@@ -146,10 +121,7 @@ RM training is closely related to **inverse reinforcement learning (IRL)**, but 
 
 In LLM RLHF, it's a **bandit-style** setup (prompt → full completion → score), which differs from classic long-horizon trajectory IRL.
 
-</details>
-
-<details>
-<summary><strong>The Bradley-Terry preference model</strong></summary>
+### The Bradley-Terry preference model
 
 The canonical reward model implementation derives from the Bradley-Terry model. Given two completions, the probability one is preferred:
 
@@ -170,10 +142,7 @@ These are mathematically identical (rearranging $\sigma(x) = 1/(1+e^{-x})$). For
 - One form may be more numerically stable depending on implementation
 - Softplus is common in convex analysis derivations
 
-</details>
-
-<details>
-<summary><strong>Architecture</strong></summary>
+### Architecture
 
 Take a pretrained **causal language model** (left-to-right attention only, like GPT — as opposed to BERT which attends in both directions) and attach a **reward head** (linear layer `hidden_dim → 1`) on top of the backbone.
 
@@ -202,10 +171,7 @@ This is similar to HuggingFace's `AutoModelForSequenceClassification`. Typically
 
 **Often 1 epoch (or very few) is used to avoid overfitting** — preference data is noisy (~25-30% annotator disagreement) and the label space is simple (binary), so extra epochs risk memorizing annotator quirks rather than learning general preferences. The exact choice is empirical.
 
-</details>
-
-<details>
-<summary><strong>Variants</strong></summary>
+### Variants
 
 **Why binary preferences instead of ratings?** Pairwise comparison ("which is better?") is easier for labelers to do consistently and easier to model. Even when you *have* Likert ratings (1-5 scale), the common practice is to binarize into chosen/rejected. Rating differences are noisier because annotator calibration varies ("my 4 vs 2" ≠ "your 4 vs 2").
 
@@ -215,10 +181,7 @@ This is similar to HuggingFace's `AutoModelForSequenceClassification`. Typically
 
 **Balancing multiple comparisons per prompt:** With K responses per prompt, form all $\binom{K}{2}$ pairs and weight the loss per comparison to balance the training signal.
 
-</details>
-
-<details>
-<summary><strong>The four types of reward/value models</strong></summary>
+### The four types of reward/value models
 
 | Model | Predicts | Granularity | Loss | Architecture |
 |-------|----------|-------------|------|-------------|
@@ -245,10 +208,7 @@ Key distinctions:
 - **ORM vs Value Function:** Both output per-token scalars, but ORM predicts "is this token in a correct response?" (static, trained on offline data). Value function predicts "what reward do I expect from here onward under the current policy?" (dynamic, retrained as the policy changes).
 - **Aggregation:** Preference RMs output one scalar at EOS (no aggregation needed). ORMs and PRMs output scores at multiple positions and need aggregation (average, min, product) to get a single response-level score for use in RLHF.
 
-</details>
-
-<details>
-<summary><strong>Outcome Reward Models (ORM) — deep dive</strong></summary>
+### Outcome Reward Models (ORM) — deep dive
 
 How per-token ORM training actually works:
 1. Generate a response to a math problem
@@ -280,10 +240,7 @@ class OutcomeRewardModel(nn.Module):
 
 Note: you're labeling **sampled trajectories**, not every possible token. Different rollouts of the same prompt get different labels depending on whether their final answer is correct.
 
-</details>
-
-<details>
-<summary><strong>Process Reward Models (PRM) — deep dive</strong></summary>
+### Process Reward Models (PRM) — deep dive
 
 PRMs predict correctness at **step boundaries** (e.g., double newlines in chain-of-thought). Three-class output: correct (+1), neutral (0), incorrect (-1).
 
@@ -341,10 +298,7 @@ Step 3: The answer is 1.2                  ✗ (PRM: incorrect)
    ```
    Cheaper and scalable (only need a final answer checker, no human step labels), but noisier since you're estimating with finite samples.
 
-</details>
-
-<details>
-<summary><strong>ORM vs PRM tradeoffs</strong></summary>
+### ORM vs PRM tradeoffs
 
 | | ORM | PRM |
 |---|-----|-----|
@@ -359,10 +313,7 @@ Step 3: The answer is 1.2                  ✗ (PRM: incorrect)
 - **ORMs** are great when correctness is verifiable (math/code) — you can get tons of labels cheaply by auto-grading final answers
 - **PRMs** are great when you care about *how* the model reasons — you can pinpoint where it went wrong and reward human-endorsed reasoning steps
 
-</details>
-
-<details>
-<summary><strong>The bigger picture: automated verification and RLAIF</strong></summary>
+### The bigger picture: automated verification and RLAIF
 
 The ORM vs PRM distinction points to a deeper trend: **the verification bottleneck**. As models get more capable, humans struggle to verify their outputs — a PhD mathematician can check a proof, but that doesn't scale. This is pushing the field from RLHF (human feedback) toward **RLAIF** (AI feedback). The pipeline is the same, the only difference is who provides the signal:
 
@@ -373,12 +324,9 @@ PRMs are central to this shift. For verifying complex reasoning (e.g., mathemati
 
 The progression: human verifiers (expensive, doesn't scale) → PRMs trained on human labels (PRM800K) → PRMs trained via Monte Carlo (no humans, just a final answer checker) → fully generative verifiers that reason about *why* a step is wrong. Each step removes more of the human bottleneck.
 
-</details>
-
 ---
 
-<details>
-<summary><strong>Generative Reward Modeling (LLM-as-a-judge)</strong></summary>
+### Generative Reward Modeling (LLM-as-a-judge)
 
 Instead of training a dedicated RM, prompt an existing LLM to judge responses — mirroring human annotation. Used in evaluations like AlpacaEval, Arena-Hard, WildBench.
 
@@ -393,17 +341,11 @@ Instead of training a dedicated RM, prompt an existing LLM to judge responses �
 
 But the gap is closing as frontier models improve. Active research area.
 
-</details>
-
-<details>
-<summary><strong>Why benchmark reward models?</strong></summary>
+### Why benchmark reward models?
 
 The RM is an instrument in a bigger pipeline, and picking the "best RM" by intuition is unreliable. The gold standard (run full RLHF and check downstream performance) is too expensive. Benchmarks are cheaper proxies. See Frick et al. (ICLR 2025), "How to Evaluate Reward Models for RLHF," which argues for proxy evaluations that predict downstream RLHF outcomes.
 
-</details>
-
-<details>
-<summary><strong>Current state of the field</strong></summary>
+### Current state of the field
 
 Reward modeling research is very active, with many benchmarks emerging in 2024-2025:
 
@@ -421,23 +363,17 @@ Reward modeling research is very active, with many benchmarks emerging in 2024-2
 **Surveys:**
 - "A Survey of Process Reward Models" (2025) covers the broader PRM landscape
 
-</details>
-
 ---
 
 ## Week 2 Revisited: RL Concepts with Reward Model Context
 
 *Now that we understand what reward models are and the different types (Preference RM, ORM, PRM), let's revisit last week's RL concepts. The confusion about value functions and advantages makes more sense when you know what the reward signal actually looks like.*
 
-<details>
-<summary><strong>The thing RL optimizes against</strong></summary>
+### The thing RL optimizes against
 
 The policy gradient methods from Week 2 use the reward model's output as their training signal. The quality of that signal — how granular, how accurate, how noisy — directly determines how well RL training works. This is why we covered reward models first (as the book intended).
 
-</details>
-
-<details>
-<summary><strong>Two framings: bandit vs. token MDP</strong></summary>
+### Two framings: bandit vs. token MDP
 
 Different algorithms treat the problem at different levels:
 
@@ -453,30 +389,21 @@ Different algorithms treat the problem at different levels:
 - Reward is **sparse**: $r_t = 0$ for all tokens except the last, where $r_T = R$
 - A value model $V_\phi(s_t)$ predicts expected reward from each intermediate state
 
-</details>
-
-<details>
-<summary><strong>Why do we need both a value model and a policy?</strong></summary>
+### Why do we need both a value model and a policy?
 
 - **Policy $\pi_\theta$**: the LLM itself. Generates text. This is what we're training.
 - **Value function $V_\phi$**: a training helper that estimates expected reward for a given state. Exists only to reduce variance in policy training.
 
 You *can* drop $V$ entirely — that's REINFORCE (use raw rewards) or GRPO (use mean reward across samples as baseline). The value model is an **optimization trick**, not a requirement.
 
-</details>
-
-<details>
-<summary><strong>Why V instead of Q?</strong></summary>
+### Why V instead of Q?
 
 - **Q for the action you took** → you already observe it directly. It's the return (reward) from the rollout.
 - **V (average across all possible actions)** → you can't observe this from a single rollout. V(s_t) = sum over all actions of pi(a\|s_t) * Q(s_t, a) — it's an expectation over the whole vocabulary. So you estimate it with a small learned model (`hidden_dim → 1`).
 
 You don't need Q for all 32K+ vocabulary tokens — you only need it for the one you actually generated, and you already have that from the reward model.
 
-</details>
-
-<details>
-<summary><strong>The diagram from the book explained</strong></summary>
+### The diagram from the book explained
 
 ![Value function training diagram](images/reward_value_interaction.png)
 
@@ -502,10 +429,7 @@ This is **credit assignment**. Early tokens that "committed" to the right answer
 
 The value model is trained via **MSE regression** against the actual return.
 
-</details>
-
-<details>
-<summary><strong>Why subtracting V reduces variance</strong></summary>
+### Why subtracting V reduces variance
 
 REINFORCE gradient:
 
@@ -521,10 +445,7 @@ Now good responses get positive weight, bad ones get negative weight. The gradie
 
 **Why this is unbiased:** The expected value of the baseline term is zero because of the score function identity — the expected gradient of log-probability under its own distribution is always zero. Subtracting any baseline is free: zero bias, reduced variance.
 
-</details>
-
-<details>
-<summary><strong>Connecting it all: denser rewards help RL</strong></summary>
+### Connecting it all: denser rewards help RL
 
 | Reward type | Supervision | Credit assignment | Algorithms |
 |-------------|-------------|-------------------|------------|
@@ -534,8 +455,6 @@ Now good responses get positive weight, bad ones get negative weight. The gradie
 | **Per-token** | Every token | Maximum | Dense rewards make TD-style ideas more plausible, but action space + off-policy instability make it very hard in practice |
 
 This is the core insight connecting Chapters 5 and 6: the **quality of the reward signal** determines how well RL training works. PRMs give better signal → RL converges faster → less reward hacking. Useful analogy (not equivalence): Monte Carlo PRM training resembles empirical Q-estimation — sample many continuations from each step and check success rates.
-
-</details>
 
 ---
 
