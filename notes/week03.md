@@ -258,7 +258,7 @@ How per-token ORM training actually works:
 
 **"But if the label is the same for every token, how does it learn anything per-token?"** The attention mechanism means each token's hidden state encodes different contextual information. Tokens near errors will have different hidden representations than tokens in correct parts. So the per-token predictions aren't identical — but they ARE noisy, because the supervision is coarse.
 
-**What ORM is actually learning:** ORM is outcome-supervised — it's trained to predict "is this whole solution correct?", not "is this specific token wrong." Even though it outputs per-token logits, the supervision is still correct vs incorrect final outcome. The model learns *correlations* with success/failure (e.g., tokens that appear in failing solutions have different patterns), not verified token-level correctness. So if a solution is correct but contains a locally "wrong-looking" intermediate step, ORM supervision won't reliably catch that — because the label is still "success." ORMs don't know which token is wrong inside a correct solution. This is exactly why PRMs exist: to give step-level credit assignment where it matters.
+**What ORM is actually learning:** The per-token output is best understood as a **prefix-to-outcome predictor**: "given everything written so far, what's the probability the final answer will be correct?" It's not scoring the token "the" — it's scoring the *state* (the entire prefix up to that point). A prefix that already contains an arithmetic error should have lower success probability than a clean prefix. This is useful for reranking and early rejection of doomed trajectories, but it's **not true credit assignment** — fine output granularity without fine supervision granularity can't localize errors. That's exactly why PRMs exist.
 
 ```python
 class OutcomeRewardModel(nn.Module):
@@ -565,7 +565,7 @@ $$A(x, y) = r(x, y) - V(x)$$
 
 1. **The reward model learns from human preferences, but humans disagree ~25-30% of the time.** What does this noise ceiling mean for RM quality? Can an RM be "better than human annotators" by averaging out disagreement, or is it fundamentally limited by annotation quality?
 
-2. **ORM per-token scoring broadcasts the same label to every token.** How much does the attention mechanism actually help with credit assignment vs. just scoring at EOS? Is per-token ORM meaningfully better than response-level scoring?
+2. **ORM per-token outputs can be interpreted as prefix-to-outcome prediction** — P(success | prefix so far). But the supervision is still a single broadcast label. What evidence do we have that per-token ORM improves anything beyond just scoring at EOS? Is this "prefix progress meter" genuinely useful, or is it noise?
 
 3. **PRM step boundaries are defined by formatting (double newlines).** But what defines a "step" for code? For general reasoning? How sensitive is PRM quality to step boundary definition?
 
