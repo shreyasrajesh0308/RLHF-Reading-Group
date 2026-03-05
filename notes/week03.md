@@ -465,6 +465,8 @@ $$A(x, y) = r(x, y) - V(x)$$
 
 5. **Generative RMs (LLM-as-judge) currently underperform trained RMs.** But frontier models keep improving. Is there a crossover point where prompting a strong model beats training a dedicated RM? What are the economics?
 
+6. **All RM training methods we covered are supervised (BCE, cross-entropy, BT loss).** Why not use RL to train the reward model itself? Where would it make sense to move from supervised to RL-based RM training, and what challenges would that introduce?
+
 ---
 
 ## Notes
