@@ -19,14 +19,15 @@ A group of UCLA ECE grad students studying [*Reinforcement Learning from Human F
 | 1 | Feb 12 @Faraday | Ch 1-3 | Introduction, history, training overview | Setup: clone repo, `uv sync`, run one training job | Shreyas |
 | 2 | Feb 20 @Maxwell | Ch 6 (fundamentals) | RL fundamentals & policy gradients | Explore `policy_gradients/` code structure | Rushabha |
 | 3 | Feb 26 @Faraday | Ch 4-5 | Instruction tuning + Reward models | Train ORM vs PRM, discuss tradeoffs | Merve |
-| 4 | Mar 5 | Ch 6 cont | Policy gradients (REINFORCE, RLOO, PPO, GRPO) | Implement REINFORCE loss by hand, run RLOO | TBD |
-| 5 | Mar 12 | Ch 7 | Reasoning & inference-time scaling | RLVR experiments | TBD |
-| 6 | Mar 19 | Ch 8 | DPO, IPO | Implement DPO loss by hand, run IPO | TBD |
-| 7 | Mar 26 | Ch 8 cont | SimPO, KTO, ORPO | Compare reference-free methods | TBD |
-| 8 | Apr 2 | Paper | **DeepSeek R1** (Guo et al. 2025) — reasoning via RL | Discuss R1-Zero emergence, GRPO at scale | TBD |
-| 9 | Apr 9 | Paper | **TBD — frontier paper** (OLMo 2, or most relevant release at the time) | Full pipeline deep-dive | TBD |
-| 10 | Apr 16 | Ch 9-10 | Rejection sampling, nature of preferences | Discussion-heavy week | TBD |
-| 11+ | Apr 23+ | Ch 11-17 / papers | Advanced topics + research directions | Pick a question, design an experiment | TBD |
+| 4 | Mar 5 @Tesla | Ch 5 cont'd | Reward models contd. — discussion + hands-on | Train ORM vs PRM, discuss tradeoffs | Merve |
+| 5 | Mar 12 | Ch 6 cont | Policy gradients (REINFORCE, RLOO, PPO, GRPO) | Implement REINFORCE loss by hand, run RLOO | TBD |
+| 6 | Mar 19 | Ch 7 | Reasoning & inference-time scaling | RLVR experiments | TBD |
+| 7 | Mar 26 | Ch 8 | DPO, IPO | Implement DPO loss by hand, run IPO | TBD |
+| 8 | Apr 2 | Ch 8 cont | SimPO, KTO, ORPO | Compare reference-free methods | TBD |
+| 9 | Apr 9 | Paper | **DeepSeek R1** (Guo et al. 2025) — reasoning via RL | Discuss R1-Zero emergence, GRPO at scale | TBD |
+| 10 | Apr 16 | Paper | **TBD — frontier paper** (OLMo 2, or most relevant release at the time) | Full pipeline deep-dive | TBD |
+| 11 | Apr 23 | Ch 9-10 | Rejection sampling, nature of preferences | Discussion-heavy week | TBD |
+| 12+ | Apr 30+ | Ch 11-17 / papers | Advanced topics + research directions | Pick a question, design an experiment | TBD |
 
 ## Setup
 
