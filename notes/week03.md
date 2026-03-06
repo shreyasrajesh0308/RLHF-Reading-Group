@@ -494,6 +494,8 @@ $$A(x, y) = r(x, y) - V(x)$$
 
 6. **All RM training methods we covered are supervised (BCE, cross-entropy, BT loss).** Why not use RL to train the reward model itself? Where would it make sense to move from supervised to RL-based RM training, and what challenges would that introduce?
 
+7. **ORM vs Preference RM: same backbone, same linear head, different indexing.** In the book's code, both models call `get_hidden_states()` to get the full last-layer hidden states `[batch, seq_len, hidden_dim]`. The Preference RM then indexes only the *last token's* hidden state and projects it to a scalar (one score per sequence). The ORM projects *every* token's hidden state to a scalar (one score per token). The architecture is identical — the only difference is which hidden states get passed through the reward head. Why is this a reasonable design? What does it imply about what each token's hidden state encodes in a causal model? And given that the ORM's per-token labels are just a broadcast of the final outcome label, is the per-token structure actually buying us anything over just scoring at the last token like the Preference RM does?
+
 ---
 
 ## Notes
